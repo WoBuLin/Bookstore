@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>图书管理</title>
+    <!--    <%&#45;&#45; 静态包含 base 标签、css 样式、jQuery 文件 &#45;&#45;%>-->
+    <!--    <%@ include file="/pages/common/head.html" %>-->
+    <link type="text/css" rel="stylesheet" th:href="@{/static/css/style.css}">
+    <script type="text/javascript" th:src="@{/static/script/jquery-1.7.2.js}"></script>
+    <script type="text/javascript" th:src="@{/static/script/vue.js}"></script>
+    <script type="text/javascript">
+        $(function () {
+            //删除的提示框和请求转换DELETE
+            $(".delete").click(function (event) {
+                var isTrue = (confirm("是否删除《" + $(this).parent().parent().find("td:first").text() + "》？"));
+                if (isTrue == true) {
+                    var delete_form = document.getElementById("delete_form");
+                    //将触发事件的删除a标签的href属性赋值为表单的action属性
+                    delete_form.action = event.target.href;
+                    //提交表单
+                    delete_form.submit();
+                }
+                //阻止超链接的默认行为
+                event.preventDefault();
+            });
+
+            //跳转到指定页码
+            $("#searchPage").click(function () {
+                var pageNo = $("#pn_input").val();
+                location.href = "/book/manager/book/page?pageNum=" + pageNo;
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+<div id="header">
+    <img class="logo_img" alt="" th:src="@{/static/img/logo.gif}">
+    <span class="wel_word">图书管理系统</span>
+    <!--    <%&#45;&#45; 静态包含后台管理按钮 &#45;&#45;%>-->
+    <!--    <%@ include file="/pages/common/manger_menu.html" %>-->
+    <div>
+        <a th:href="@{/manager/book/page?pageNum=1}">图书管理</a>
+        <a th:href="@{/manager/order/all}">订单管理</a>
+        <a th:href="@{/}">返回商城</a>
+    </div>
+</div>
+
+<div id="main">
+    <table>
+        <tr>
+            <td>名称</td>
+            <td>价格</td>
+            <td>作者</td>
+            <td>销量</td>
+            <td>库存</td>
+            <td colspan="2">操作</td>
+        </tr>
+        <tr th:each="book : ${page.pageInfo.list}">
+            <td th:text="${book.name}"></td>
+            <td th:text="${book.price}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.sales}"></td>
+            <td th:text="${book.stock}"></td>
+            <td>
+                <a th:href="@{'/manager/get/book/' + ${book.id}}">修改</a>
+            </td>
+            <td>
+                <a class="delete" th:href="@{'/manager/book/' + ${book.id}}">删除</a>
+            </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a th:href="@{/manager/add/book}">添加图书</a></td>
+        </tr>
+    </table>
+</div>
+
+<!--删除的form表单-->
+<form id="delete_form" method="post">
+    <input type="hidden" name="_method" value="delete">
+</form>
+
+<!--<%&#45;&#45;静态包含分页条&#45;&#45;%>-->
+<!--<%@ include file="/pages/common/page_nav.html"%>-->
+<div id="page_nav">
+    <a th:if="${page.pageInfo.hasPreviousPage == true}" th:href="@{${page.url} + 1}">首页</a>
+    <a th:if="${page.pageInfo.hasPreviousPage == true}" th:href="@{${page.url} + ${page.pageInfo.prePage}}">上一页</a>
+    <span th:each="num : ${page.pageInfo.navigatepageNums}">
+        <a th:if="${page.PageNum} == ${num}" th:href="@{${page.url} + ${num}}"
+           th:text="'[' + ${num}+ ']'"></a>
+        <a th:if="${page.PageNum} != ${num}" th:href="@{${page.url} + ${num}}" th:text="${num}"></a>
+    </span>
+    <a th:if="${page.pageInfo.hasNextPage == true}" th:href="@{${page.url} + ${page.pageInfo.nextPage}}">下一页</a>
+    <a th:if="${page.pageInfo.hasNextPage == true}" th:href="@{${page.url} + ${page.pageInfo.pages}}">末页</a>
+    <span th:text="'共' + ${page.pageInfo.pages} + '页,' + ${page.pageInfo.total} + '条记录 '"></span>
+    到第<input th:value="${page.pageNum}" name="toPageNum" id="pn_input"/>页
+    <input id="searchPage" type="button" value="确定">
+</div>
+
+<br/><br/><br/>
+
+<!--<%&#45;&#45;静态包含页脚内容&#45;&#45;%>-->
+<!--<%@ include file="/pages/common/footer.html" %>-->
+
+<div id="bottom">
+			<span>
+				尚硅谷书城.Copyright &copy;2015
+			</span>
+</div>
+</body>
+</html>

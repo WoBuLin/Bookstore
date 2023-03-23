@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <!--    <%&#45;&#45; 静态包含 base 标签、css 样式、jQuery 文件 &#45;&#45;%>-->
+    <!--    <%@ include file="/pages/common/head.jsp" %>-->
+    <link type="text/css" rel="stylesheet" th:href="@{/static/css/style.css}">
+    <script type="text/javascript" th:src="@{/static/script/jquery-1.7.2.js}"></script>
+    <script type="text/javascript" th:src="@{/static/script/vue.js}"></script>
+
+    <style type="text/css">
+        h1 {
+            text-align: center;
+            margin-top: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="header">
+    <img class="logo_img" alt="" th:src="@{/static/img/logo.gif}">
+    <span class="wel_word">后台管理系统</span>
+    <!--    <%&#45;&#45; 静态包含后台管理按钮 &#45;&#45;%>-->
+    <!--    <%@ include file="/pages/common/manger_menu.jsp" %>-->
+
+    <div>
+        <a th:href="@{/manager/book/page?pageNum=1}">图书管理</a>
+        <a th:href="@{/manager/order/all}">订单管理</a>
+        <a th:href="@{/}">返回商城</a>
+    </div>
+</div>
+
+<div id="main">
+    <h1>欢迎管理员进入后台管理系统</h1>
+</div>
+<!--<%&#45;&#45;静态包含页脚内容&#45;&#45;%>-->
+<!--<%@ include file="/pages/common/footer.jsp" %>-->
+
+<div id="bottom">
+			<span>
+				尚硅谷书城.Copyright &copy;2015
+			</span>
+</div>
+</body>
+</html>

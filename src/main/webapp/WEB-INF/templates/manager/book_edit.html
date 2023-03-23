@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑图书</title>
+    <!--    <%&#45;&#45; 静态包含 base 标签、css 样式、jQuery 文件 &#45;&#45;%>-->
+    <!--    <%@ include file="/pages/common/head.jsp" %>-->
+    <link type="text/css" rel="stylesheet" th:href="@{/static/css/style.css}">
+    <script type="text/javascript" th:src="@{/static/script/jquery-1.7.2.js}"></script>
+
+</head>
+<body>
+<div id="header">
+    <img class="logo_img" alt="" th:src="@{/static/img/logo.gif}">
+    <span class="wel_word">编辑图书</span>
+    <!--    <%&#45;&#45; 静态包含后台管理按钮 &#45;&#45;%>-->
+    <!--    <%@ include file="/pages/common/manger_menu.jsp" %>-->
+    <div>
+        <a th:href="@{/manager/book/page?pageNum=1}">图书管理</a>
+        <a th:href="@{/manager/order/all}">订单管理</a>
+        <a th:href="@{/}">返回商城</a>
+    </div>
+
+</div>
+<div id="main">
+    <form th:if="${book} != null" th:action="@{/manager/book}" method="post">
+        <input type="hidden" name="id" th:value="${book.id}">
+        <input type="hidden" name="_method" value="put">
+        <table>
+            <tr>
+                <td>名称</td>
+                <td>价格</td>
+                <td>作者</td>
+                <td>销量</td>
+                <td>库存</td>
+                <td colspan="2">操作</td>
+            </tr>
+            <tr>
+                <td><input name="name" type="text" th:value="${book.name}"/></td>
+                <td><input name="price" type="text" th:value="${book.price}"/></td>
+                <td><input name="author" type="text" th:value="${book.author}"/></td>
+                <td><input name="sales" type="text" th:value="${book.sales}"/></td>
+                <td><input name="stock" type="text" th:value="${book.stock}"/></td>
+                <td><input type="submit" value="提交"/></td>
+            </tr>
+        </table>
+    </form>
+    <form th:if="${book} == null" th:action="@{/manager/book}" method="post">
+        <table>
+            <tr>
+                <td>名称</td>
+                <td>价格</td>
+                <td>作者</td>
+                <td>销量</td>
+                <td>库存</td>
+                <td colspan="2">操作</td>
+            </tr>
+            <tr>
+                <td><input name="name" type="text" value=""/></td>
+                <td><input name="price" type="text" value=""/></td>
+                <td><input name="author" type="text" value=""/></td>
+                <td><input name="sales" type="text" value=""/></td>
+                <td><input name="stock" type="text" value=""/></td>
+                <td><input type="submit" value="提交"/></td>
+            </tr>
+        </table>
+    </form>
+
+
+</div>
+<!--<%&#45;&#45;静态包含页脚内容&#45;&#45;%>-->
+<!--<%@ include file="/pages/common/footer.jsp" %>-->
+<div id="bottom">
+            <span>
+				尚硅谷书城.Copyright &copy;2015
+			</span>
+</div>
+
+</body>
+</html>

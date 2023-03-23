@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>订单管理</title>
+    <!--    <%&#45;&#45; 静态包含 base 标签、css 样式、jQuery 文件 &#45;&#45;%>-->
+    <!--    <%@ include file="/pages/common/head.jsp" %>-->
+    <link type="text/css" rel="stylesheet" th:href="@{/static/css/style.css}">
+    <script type="text/javascript" th:src="@{/static/script/jquery-1.7.2.js}"></script>
+    <script type="text/javascript" th:src="@{/static/script/vue.js}"></script>
+</head>
+<body>
+
+<div id="header">
+    <img class="logo_img" alt="" th:src="@{/static/img/logo.gif}">
+    <span class="wel_word">订单管理系统</span>
+    <!--    <%&#45;&#45; 静态包含后台管理按钮 &#45;&#45;%>-->
+    <!--    <%@ include file="/pages/common/manger_menu.jsp" %>-->
+    <div>
+        <a th:href="@{/manager/book/page?pageNum=1}">图书管理</a>
+        <a th:href="@{/manager/order/all}">订单管理</a>
+        <a th:href="@{/}">返回商城</a>
+    </div>
+</div>
+
+<div id="main">
+    <table>
+        <tr>
+            <td>订单号</td>
+            <td>用户ID</td>
+            <td>日期</td>
+            <td>金额</td>
+            <td>详情</td>
+            <td>发货</td>
+        </tr>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.orderId}"></td>
+            <td th:text="${order.userId}"></td>
+            <td th:text="${order.createTime}"></td>
+            <td th:text="${order.price}"></td>
+            <td><a th:href="@{'/order/details/' + ${order.orderId}}">查看详情</a></td>
+            <td th:if="${ order.status } == 0">
+                <a th:href="@{'/manager/order/send/' + ${order.orderId}}">点击发货</a>
+            </td>
+            <td th:if="${ order.status } == 1">已发出</td>
+            <td th:if="${ order.status } == 2">已签收</td>
+        </tr>
+    </table>
+</div>
+<!--<%&#45;&#45;静态包含页脚内容&#45;&#45;%>-->
+<!--<%@ include file="/pages/common/footer.jsp" %>-->
+<div id="bottom">
+			<span>
+				尚硅谷书城.Copyright &copy;2015
+			</span>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--开启注解扫描，不包含@Controller注解-->
+    <context:component-scan base-package="com.basara">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--引入jdbc.properties-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!--配置Druid数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="driverClassName" value="${jdbc.driverClassName}"></property>
+    </bean>
+
+    <!--配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--开启事务的注解驱动-->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!--配置SqlSessionFactoryBean-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--设置mybatis配置文件路径-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <property name="dataSource" ref="dataSource"></property>
+        <!--设置类型别名所对应的包-->
+        <property name="typeAliasesPackage" value="com.basara.pojo"></property>
+    </bean>
+
+    <!--配置mapper接口的扫描-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.basara.mapper"></property>
+    </bean>
+
+    <!--Kaptcha生成验证码-->
+    <bean id="kaptchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+        <property name="config">
+            <bean class="com.google.code.kaptcha.util.Config">
+                <constructor-arg>
+                    <props>
+                        <!-- 验证码宽度 -->
+                        <prop key="kaptcha.image.width">140</prop>
+                        <!-- 验证码高度 -->
+                        <prop key="kaptcha.image.height">38</prop>
+                        <!-- 生成验证码内容范围 -->
+                        <!-- <prop  key="kaptcha.textproducer.char.string">123456789abcDeFGHjkLmnoQqrsTUVWXYZ</prop> -->
+                        <!-- 验证码个数 -->
+                         <prop  key="kaptcha.textproducer.char.length">4</prop>
+                        <!-- 是否有边框 -->
+                        <!-- <prop  key="kaptcha.border">no</prop> -->
+                        <!-- 边框颜色 -->
+                        <!-- <prop  key="kaptcha.border.color">105,179,90</prop> -->
+                        <!-- 边框厚度 -->
+                        <!-- <prop  key="kaptcha.border.thickness">1</prop> -->
+                        <!-- 验证码字体颜色 -->
+                        <!-- <prop  key="kaptcha.textproducer.font.color">black</prop> -->
+                        <!-- 验证码字体大小 -->
+                         <prop  key="kaptcha.textproducer.font.size">30</prop>
+                        <!-- 验证码所属字体样式 -->
+                        <!-- <prop  key="kaptcha.textproducer.font.names">楷体</prop> -->
+                        <!-- 干扰线颜色 -->
+                        <!-- <prop  key="kaptcha.noise.color">black</prop> -->
+                        <!-- 验证码文本字符间距 -->
+                        <!-- <prop  key="kaptcha.textproducer.char.space">3</prop>  -->
+                        <!-- 图片样式 :阴影-->
+                        <!-- <prop  key="kaptcha.obscurificator.impl">com.google.code.kaptcha.impl.ShadowGimpy</prop> -->
+                    </props>
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
+</beans>

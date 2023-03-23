@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.basara.mapper.OrderMapper">
+    <!--    int saveOrder(Order order);-->
+    <insert id="saveOrder">
+        insert into t_order(`order_id`, `create_time`, `price`, `status`, `user_id`)
+        values (#{orderId}, #{createTime}, #{price}, #{status}, #{userId})
+    </insert>
+
+    <!--    List<Order> queryOrders();-->
+    <select id="queryOrders" resultType="order">
+        select `order_id`, `create_time`, `price`, `status`, `user_id`
+        from t_order
+    </select>
+
+    <!--    List<Order> queryOrdersByUserId(Integer userId);-->
+    <select id="queryOrdersByUserId" resultType="order">
+        select `order_id`, `create_time`, `price`, `status`, `user_id`
+        from t_order
+        where user_id = #{userId}
+    </select>
+
+    <!--        int changeOrderStatus(@Param("status") Integer status,@Param("orderId") String orderId);-->
+    <update id="changeOrderStatus">
+        update t_order
+        set `status` = #{status}
+        where order_id = #{orderId}
+    </update>
+
+    <!--    String queryLastOrderId(Integer userId);-->
+    <select id="queryLastOrderId" resultType="string">
+        select order_id
+        from t_order
+        where user_id = #{userId}
+        order by `create_time` desc
+        limit 1
+    </select>
+</mapper>
